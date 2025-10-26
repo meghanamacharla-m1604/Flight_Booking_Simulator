@@ -255,3 +255,68 @@ Constraints - maintaining the data integrity common constraints: primary KEY - u
 Foreign KEY (flight_id) NOt NULL - Column must have
 values - passenegr_name Varchar(50) NOT NULL Unique - column must be a unique one - seat_no INT UNIQUE check -
 values that need to be restrict - CHECK (SEATS_AVAILABLE >= 0) default - default value if none given - base_fare DECIMAL(10, 2) DEafult 5000
+
+USE flight_booking;
+
+--  Update existing flights table (add missing columns if not already there)
+ALTER TABLE flights
+ADD COLUMN IF NOT EXISTS airline_name VARCHAR(50),
+ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active';
+
+-- Create SEATS table
+CREATE TABLE IF NOT EXISTS seats (
+    seat_id INT AUTO_INCREMENT PRIMARY KEY,
+    flight_id INT NOT NULL,
+    seat_label VARCHAR(10) NOT NULL,
+    seat_class VARCHAR(20) DEFAULT 'Economy',
+    price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'available',  -- available / reserved / booked
+    FOREIGN KEY (flight_id) REFERENCES flights(id)
+);
+
+-- Create BOOKINGS table
+CREATE TABLE IF NOT EXISTS bookings (
+    booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    pnr VARCHAR(10) UNIQUE,
+    flight_id INT NOT NULL,
+    seat_id INT NOT NULL,
+    total_price DECIMAL(10, 2),
+    status VARCHAR(20) DEFAULT 'pending',    -- pending / confirmed / cancelled / failed
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (flight_id) REFERENCES flights(id),
+    FOREIGN KEY (seat_id) REFERENCES seats(seat_id)
+);
+
+--  Create PASSENGERS table
+CREATE TABLE IF NOT EXISTS passengers (
+    passenger_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT NOT NULL,
+    name VARCHAR(50),
+    age INT,
+    contact VARCHAR(20),
+    FOREIGN KEY (booking_id) REFERENCES bookings(booking_id)
+);
+
+--  Sample seat data (optional, just to test seat availability)
+INSERT INTO seats (flight_id, seat_label, seat_class, price, status)
+VALUES 
+(1, '1A', 'Economy', 8000.00, 'available'),
+(1, '1B', 'Economy', 8000.00, 'available'),
+(2, '1A', 'Economy', 8000.00, 'available'),
+(3, '1A', 'Economy', 9000.00, 'available');
+
+--  Example booking flow simulation (optional test data)
+-- 1️ Book a seat
+INSERT INTO bookings (pnr, flight_id, seat_id, total_price, status)
+VALUES ('PNR12345', 1, 1, 8000.00, 'confirmed');
+
+-- 2️ Add passenger info
+INSERT INTO passengers (booking_id, name, age, contact)
+VALUES (1, 'Alice', 28, '9876543210');
+
+--  Check your tables
+SELECT * FROM flights;
+SELECT * FROM seats;
+SELECT * FROM bookings;
+SELECT * FROM passengers;
+
