@@ -1,87 +1,85 @@
-🛫 Flight Reservation System (FastAPI + Streamlit + SQLite)
+# 🛫 Flight Booking Simulator – Backend (FastAPI + SQLite)
 
-A complete **Python-based flight booking simulator** featuring a FastAPI backend, a Streamlit frontend, and an SQLite database.  
-This project replicates the flow of a real-world flight booking platform — from searching and dynamic pricing to booking confirmation and ticket generation.
-
----
- 🌟 Project Overview
-
-This simulator was built as part of a multi-stage internship project.  
-Each milestone focuses on different aspects of full-stack development — database design, REST API creation, pricing logic, transactional safety, and frontend integration.
-
- 🔹 Milestone Breakdown
-
-- **Milestone 1 – Database Setup:**  
-  Designed a normalized SQL schema and inserted initial datasets for flights, users, and bookings.
-
-- **Milestone 2 – Dynamic REST API & Pricing:**  
-  Created a FastAPI-based backend with endpoints for flight search, filtering, and demand-driven pricing logic.
-
-- **Milestone 3 – Booking Workflow:**  
-  Implemented concurrency-safe transactions to ensure atomic seat booking, PNR generation, and e-ticket creation.
-
-- **Milestone 4 – Frontend Integration:**  
-  Developed a fully functional Streamlit interface to connect with backend APIs for a complete booking experience.
+This project implements the **backend API** for a flight booking simulator, built using **FastAPI** and **SQLite**.  
+It handles all backend logic — from user authentication, flight search, and booking transactions to PDF ticket generation, refund receipts, and dynamic pricing.
 
 ---
 
- ⚙️ Technology Stack
+## 🌟 Project Overview
+
+This backend is designed to simulate the core functionality of a modern airline reservation system.  
+It provides RESTful endpoints for user registration, flight browsing, bookings, payments, and cancellations — all powered by a secure, transactional database layer.
+
+### 🔹 Major Features
+- ✅ **FastAPI-based REST API**
+- 💰 **Dynamic flight pricing** based on seat availability and demand
+- 🧾 **Automatic PDF ticket & cancellation receipt generation**
+- 🔁 **Background scheduler** that updates demand factors every few minutes
+- 🤖 **Gemini AI chatbot** integration (optional, if API key configured)
+- 🧠 **Secure user authentication** (password hashing)
+- 💾 **SQLite database** with schema for flights, users, bookings, and cancellations
+
+---
+
+## ⚙️ Technology Stack
 
 | Component | Technology | Purpose |
 | :-- | :-- | :-- |
-| **Backend Framework** | FastAPI | Handles all API routes and dynamic logic. |
-| **Frontend Framework** | Streamlit | Builds an interactive and modern web interface. |
-| **Database** | SQLite | Stores flight, user, and booking details locally. |
-| **Background Scheduler** | APScheduler | Simulates changing demand and pricing in the background. |
-| **PDF Generator** | ReportLab | Creates structured e-ticket PDFs. |
+| **Backend Framework** | FastAPI | Handles routing, API logic, and data models. |
+| **Database** | SQLite | Lightweight SQL database for flight and booking data. |
+| **Background Tasks** | APScheduler | Simulates periodic demand changes. |
+| **PDF Generator** | ReportLab | Generates e-ticket and refund PDF documents. |
+| **AI Assistant** | Google Gemini API | Provides chatbot interaction (optional). |
 
 ---
 
- 🧱 Implementation Summary
+## 🧩 Key Functional Modules
 
-| Milestone | Description | Status | Implementation Details |
-| :-- | :-- | :-- | :-- |
-| **M1 – Database Schema** | Designed and populated flight, user, and booking tables. | ✅ Complete | Defined in `db.sql` with essential constraints and sample entries. |
-| **M2 – REST API + Dynamic Pricing** | Built endpoints for flight search, validation, and price updates. | ✅ Complete | Implemented in `main.py` using `calculate_dynamic_price()` function. |
-| **M2 – Background Jobs** | Simulated market demand to affect prices dynamically. | ✅ Complete | Scheduled using APScheduler’s `update_demand_factor()` job. |
-| **M3 – Transactional Booking Engine** | Added PNR generation, seat locking, and booking cancellation. | ✅ Complete | SQLite transactions ensure concurrency-safe seat allocation. |
-| **M4 – UI & Integration** | Integrated backend with a responsive Streamlit frontend. | ✅ Complete | Built in `frontend.py`, connecting all `/flights` and `/bookings` routes. |
-
----
-🚀 Getting Started
-
-### 🔧 Prerequisites
-Make sure you have the following installed:
-- Python **3.8 or higher**
-- Git *(optional but recommended)*
+| Module | Description |
+| :-- | :-- |
+| **User Management** | Register, login, and secure password hashing. |
+| **Flights API** | Search, filter, and view dynamically priced flights. |
+| **Bookings API** | Create, confirm, cancel, and view bookings. |
+| **Tickets & Receipts** | Generate and download PDFs for tickets and cancellations. |
+| **Demand Simulation** | Periodically adjusts demand factors automatically. |
+| **Chatbot (Optional)** | Gemini-based AI travel assistant. |
 
 ---
- Step 1: Clone the Repository
-git clone https://github.com/YourUsername/flight-booking-simulator.git
-cd flight-booking-simulator
 
-Step 2: Set Up Virtual Environment
+## 🚀 How to Run the Project Locally
+
+### 🧱 Prerequisites
+Make sure you have:
+- Python **3.3**
+- `pip` package manager
+
+---
+
+Step 1️⃣ — Clone the Repository
+git clone https://github.com/YourUsername/flight-booking-backend.git
+cd flight-booking-backend
+
+Step 2️⃣ — Create a Virtual Environment
 python -m venv venv
-
-# Activate the environment
-# For macOS/Linux
+# Activate it
+# macOS/Linux
 source venv/bin/activate
-# For Windows (PowerShell)
+# Windows PowerShell
 .\venv\Scripts\activate
 
-Step 3: Install Dependencies
+Step 3️⃣ — Install Dependencies
 pip install -r requirements.txt
 
-Step 4: Initialize the Database
-Create and populate the SQLite database with sample flight data:
+Step 4️⃣ — Initialize the Database
+Run your database setup or schema initialization file (if you have one), e.g.:
 python initialize_db.py
+Ensure that db.sqlite exists in the project directory.
 
-Step 5: Run the FastAPI Backend
-This will launch the API server that manages flights, bookings, and pricing.
+Step 5️⃣ — Run the FastAPI Server
 uvicorn main:app --reload
-By default, it runs on http://127.0.0.1:8000
 
-Step 6: Start the Streamlit Frontend
-Open a new terminal window and start the Streamlit client:
-streamlit run frontend.py
-The application will open in your browser — usually at http://localhost:8501
+
+By default, your backend runs at:
+ http://127.0.0.1:8000
+You can view the interactive API docs here:
+📘 Swagger UI → http://127.0.0.1:8000/docs
